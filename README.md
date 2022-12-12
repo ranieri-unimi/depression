@@ -1,3 +1,8 @@
-# Git Template
+# depression 🫥
+project + thesis
 
-Lorem ipsum dolor sit amet
+## pre training + fine tuning
+📚 BERT + XLNet
+
+## early detection
+tba 📢
