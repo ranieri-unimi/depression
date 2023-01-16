@@ -3,3 +3,10 @@ ipywidgets
 pandas
 seaborn
 black
+torch
+transformers
+datasets
+evaluate[evaluator]
+sklearn
+accelerate
+nvidia-ml-py3
