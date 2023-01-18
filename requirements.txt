@@ -7,7 +7,7 @@ torch
 transformers
 datasets
 evaluate[evaluator]
-sklearn
+scikit-learn
 accelerate
 nvidia-ml-py3
 liwc
