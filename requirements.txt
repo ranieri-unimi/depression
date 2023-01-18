@@ -10,3 +10,4 @@ evaluate[evaluator]
 sklearn
 accelerate
 nvidia-ml-py3
+liwc
