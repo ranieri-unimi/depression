@@ -11,3 +11,5 @@ scikit-learn
 accelerate
 nvidia-ml-py3
 liwc
+plotly
+nbformat>=4.2.0
