@@ -1,8 +1,8 @@
 # depression 🫥
 project + thesis
 
-## pre training + fine tuning
-📚 BERT + XLNet
+## pre training + fine tuning 📚 
+RoBERTa experiments on `bert.fine.fine.ipynb`
 
 ## early detection
-tba 📢
+Textual Time Series classification on `time.dep.ipynb`
