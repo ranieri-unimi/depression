@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 def erde_evaluation(goldenTruth_path, algorithmResult_path, o):
     data_golden = pd.read_csv(
         goldenTruth_path, sep="\t", header=None, names=["subj_id", "true_risk"]
@@ -25,21 +26,21 @@ def erde_evaluation(goldenTruth_path, algorithmResult_path, o):
     erde = merged_data["erde"]
 
     # Count of how many true positives there are
-    true_pos = len(merged_data[t_risk == 1])
+    P_true = len(merged_data[t_risk == 1])
 
     # Count of how many positive cases the system decided there were
-    pos_decisions = len(merged_data[risk_d == 1])
+    P_hat = len(merged_data[risk_d == 1])
 
     # Count of how many of them are actually true positive cases
-    pos_hits = len(merged_data[(t_risk == 1) & (risk_d == 1)])
+    TP = len(merged_data[(t_risk == 1) & (risk_d == 1)])
 
     # Total count of users
-    total_users = len(merged_data)
+    N = len(merged_data)
 
     # ERDE calculus
-    for i in range(total_users):
+    for i in range(N):
         if risk_d[i] == 1 and t_risk[i] == 0:
-            erde.iat[i] = float(true_pos) / total_users
+            erde.iat[i] = float(P_true) / N
         elif risk_d[i] == 0 and t_risk[i] == 1:
             erde.iat[i] = 1.0
         elif risk_d[i] == 1 and t_risk[i] == 1:
@@ -48,8 +49,8 @@ def erde_evaluation(goldenTruth_path, algorithmResult_path, o):
             erde.iat[i] = 0.0
 
     # Calculus of F1, Precision, Recall and global ERDE
-    precision = float(pos_hits) / pos_decisions
-    recall = float(pos_hits) / true_pos
+    precision = float(TP) / P_hat
+    recall = float(TP) / P_true
     F1 = 2 * (precision * recall) / (precision + recall)
     erde_global = erde.mean() * 100
 
@@ -59,3 +60,44 @@ def erde_evaluation(goldenTruth_path, algorithmResult_path, o):
     print("F1: %.2f" % F1)
     print("Precision: %.2f" % precision)
     print("Recall: %.2f" % recall)
+
+
+def erde_mem(predictions, labels, delays, order=50):
+
+    yy = list(zip(predictions, labels))
+
+    P_TRUE = sum(labels)
+    P_HAT = sum(predictions)
+
+    TP = yy.count((1, 1))
+    N = len(yy)
+
+    # https://tec.citius.usc.es/ir/pdf/CLEF16_paper.pdf
+    erde = list()
+    for i in range(N):
+        y_hat, y_true = yy[i]
+        match (y_hat, y_true):
+            case (0, 0):
+                loss = 0
+            case (1, 0):
+                loss = P_TRUE / N
+            case (0, 1):
+                loss = 1
+            case (1, 1):
+                penalty = np.exp(delays[i] - order)
+                loss = 1 - (1 / (1 + penalty))
+
+        erde.append(loss)
+
+    # Calculus of F1, Precision, Recall and global ERDE
+    precision = TP / P_HAT
+    recall = TP / P_TRUE
+    F1 = 2 * (precision * recall) / (precision + recall)
+    erde_global = sum(erde)/len(erde)
+
+    print(f"Global ERDE({order}): {erde_global}")
+    print(f"F1: {F1:.2f}")
+    print(f"Precision: {precision:.2f}")
+    print(f"Recall: {recall:.2f}")
+
+    return
