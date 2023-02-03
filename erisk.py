@@ -100,4 +100,21 @@ def erde_mem(predictions, labels, delays, order=50):
     print(f"Precision: {precision:.2f}")
     print(f"Recall: {recall:.2f}")
 
-    return
+
+def metrics(predictions, labels):
+
+    yy = list(zip(predictions, labels))
+
+    P_TRUE = sum(labels)
+    P_HAT = sum(predictions)
+
+    TP = yy.count((1, 1))
+    N = len(yy)
+
+    precision = TP / P_HAT
+    recall = TP / P_TRUE
+    F1 = 2 * (precision * recall) / (precision + recall)
+    
+    print(f"F1: {F1:.2f}")
+    print(f"Precision: {precision:.2f}")
+    print(f"Recall: {recall:.2f}")
