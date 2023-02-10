@@ -93,7 +93,7 @@ def erde_mem(predictions, labels, delays, order=50):
     precision = TP / P_HAT
     recall = TP / P_TRUE
     F1 = 2 * (precision * recall) / (precision + recall)
-    erde_global = sum(erde)/len(erde)
+    erde_global = sum(erde) / len(erde)
 
     print(f"Global ERDE({order}): {erde_global}")
     print(f"F1: {F1:.2f}")
@@ -109,12 +109,15 @@ def metrics(predictions, labels):
     P_HAT = sum(predictions)
 
     TP = yy.count((1, 1))
+    TN = yy.count((0, 0))
     N = len(yy)
 
     precision = TP / P_HAT
     recall = TP / P_TRUE
     F1 = 2 * (precision * recall) / (precision + recall)
-    
+    accuracy = (TP + TN) / N
+
     print(f"F1: {F1:.2f}")
     print(f"Precision: {precision:.2f}")
     print(f"Recall: {recall:.2f}")
+    print(f"Accuracy: {accuracy:.2f}")
